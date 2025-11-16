@@ -1,7 +1,7 @@
 menu "External packages"
 
-# Add external package sources here
-# source "$BR2_EXTERNAL_RPTR8_PATH/package/myapp/Config.in"
+source "$BR2_EXTERNAL_RPTR8_PATH/packages/helloworld-example/Config.in"
+source "$BR2_EXTERNAL_RPTR8_PATH/packages/hellopython-example/Config.in"
 
 endmenu
 

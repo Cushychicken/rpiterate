@@ -1,0 +1,8 @@
+config BR2_PACKAGE_HELLOWORLD_EXAMPLE
+	bool "helloworld-example"
+	help
+	  A simple Hello World C program designed for cross-compilation
+	  to Raspberry Pi 4, suitable for use as a Buildroot package.
+
+	  https://github.com/Cushychicken/helloworld-example
+

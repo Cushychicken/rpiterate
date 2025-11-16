@@ -89,13 +89,26 @@ Application layer programs are implemented as external packages in `br-external/
 - `Config.in` - Package configuration menu
 - `<package>.mk` - Package build and install rules
 
+### Example Packages
+
+Two example packages are included to demonstrate the package structure:
+
+- **helloworld-example** - A simple C Hello World program ([GitHub](https://github.com/Cushychicken/helloworld-example))
+- **hellopython-example** - A simple Python Hello World program ([GitHub](https://github.com/Cushychicken/hellopython-example))
+
+These packages are already configured in `br-external/packages/` and can be enabled via `make menuconfig` under "External packages".
+
+Use these as cookiecutter examples to bootstrap adding your own applications. 
+
+### Adding a New Package
+
 To add a new package:
 
 1. Create package directory: `br-external/packages/myapp/`
 2. Create `Config.in` with package configuration
 3. Create `myapp.mk` with build/install rules
-4. Add `source "$BR2_EXTERNAL_RPTR8_PATH/package/myapp/Config.in"` to `br-external/packages/Config.in`
-5. Rebuild: `cd buildroot && make menuconfig` (enable package) && `make`
+4. Add `source "$BR2_EXTERNAL_RPTR8_PATH/packages/myapp/Config.in"` to `br-external/packages/Config.in`
+5. Rebuild: `make -C buildroot BR2_EXTERNAL=$(pwd)/br-external menuconfig` (enable package) && `make -C buildroot BR2_EXTERNAL=$(pwd)/br-external`
 
 ## Configuration
 

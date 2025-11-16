@@ -1,0 +1,9 @@
+config BR2_PACKAGE_HELLOPYTHON_EXAMPLE
+	bool "hellopython-example"
+	depends on BR2_PACKAGE_PYTHON3
+	help
+	  A simple Hello World Python program designed for cross-compilation
+	  to Raspberry Pi 4, suitable for use as a Buildroot package.
+
+	  https://github.com/Cushychicken/hellopython-example
+
