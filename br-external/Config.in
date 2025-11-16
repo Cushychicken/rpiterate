@@ -1,0 +1,2 @@
+source "$BR2_EXTERNAL_RPTR8_PATH/packages/Config.in"
+

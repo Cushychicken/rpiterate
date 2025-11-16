@@ -1,0 +1,7 @@
+menu "External packages"
+
+# Add external package sources here
+# source "$BR2_EXTERNAL_RPTR8_PATH/package/myapp/Config.in"
+
+endmenu
+

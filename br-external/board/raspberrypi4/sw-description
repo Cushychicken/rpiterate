@@ -1,0 +1,26 @@
+software =
+{
+	version = "1.0";
+	hardware-compatibility = ["1.0"];
+
+	files: (
+		{
+			filename = "rootfs.ext2";
+			device = "/dev/mmcblk0p2";
+			type = "raw";
+			compressed = false;
+		}
+	);
+
+	scripts: (
+		{
+			filename = "preinst";
+			type = "shellscript";
+		},
+		{
+			filename = "postinst";
+			type = "shellscript";
+		}
+	);
+}
+

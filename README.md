@@ -11,9 +11,8 @@ cd rpiterate
 git submodule update --init --recursive
 
 # Configure and build
-cd buildroot
-make BR2_EXTERNAL=../br-external rptr8_rpi4_defconfig
-make
+make -C buildroot BR2_EXTERNAL=$(pwd)/br-external rptr8_rpi4_defconfig
+make -C buildroot BR2_EXTERNAL=$(pwd)/br-external
 
 # Output files
 # - buildroot/output/images/sdcard.img
