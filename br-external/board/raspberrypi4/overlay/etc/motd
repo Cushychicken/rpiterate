@@ -1,0 +1,8 @@
+
+Welcome to rpiterate Raspberry Pi 4!
+
+This system was built with Buildroot and includes:
+- SWUpdate for over-the-air updates
+- Python 3 with Flask, requests, pyserial, and gpiozero
+- Custom rootfs overlay
+

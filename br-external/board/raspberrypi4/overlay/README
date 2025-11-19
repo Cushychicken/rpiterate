@@ -1,0 +1,12 @@
+Rootfs overlay for Raspberry Pi 4
+
+This directory structure will be copied over the target filesystem during the build.
+Any files placed here will override or be added to the target rootfs.
+
+Examples:
+- /etc/motd - Customize the message of the day
+- /etc/hostname - Set the hostname
+- /etc/network/interfaces - Custom network configuration
+- /usr/bin/custom-script.sh - Add custom scripts
+- /etc/systemd/system/*.service - Add systemd services
+

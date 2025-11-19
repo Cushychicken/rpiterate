@@ -25,11 +25,6 @@ if [ -f "${BINARIES_DIR}/rootfs.ext2" ]; then
 		exit 1
 	fi
 	
-	# Create empty preinst/postinst scripts if they don't exist
-	[ -f "${BOARD_DIR}/preinst" ] || touch "${SWU_TMP}/preinst"
-	[ -f "${BOARD_DIR}/postinst" ] || touch "${SWU_TMP}/postinst"
-	chmod +x "${SWU_TMP}/preinst" "${SWU_TMP}/postinst"
-	
 	# Generate .swu file using cpio (swupdate .swu files are CPIO archives)
 	cd "${SWU_TMP}"
 	if find . -type f | cpio -o -H newc > "${BINARIES_DIR}/rptr8-rpi4.swu" 2>/dev/null; then
