@@ -14,8 +14,17 @@ if [ -f "${BINARIES_DIR}/rootfs.ext2" ]; then
 	SWU_TMP=$(mktemp -d)
 	trap "rm -rf ${SWU_TMP}" EXIT
 	
-	# Copy rootfs image
-	cp "${BINARIES_DIR}/rootfs.ext2" "${SWU_TMP}/"
+	# Compress rootfs image to reduce .swu file size
+	echo "Compressing rootfs image..."
+	if command -v gzip >/dev/null 2>&1; then
+		gzip -c "${BINARIES_DIR}/rootfs.ext2" > "${SWU_TMP}/rootfs.ext2.gz"
+		ROOTFS_FILE="rootfs.ext2.gz"
+		ROOTFS_COMPRESSED=true
+	else
+		cp "${BINARIES_DIR}/rootfs.ext2" "${SWU_TMP}/"
+		ROOTFS_FILE="rootfs.ext2"
+		ROOTFS_COMPRESSED=false
+	fi
 	
 	# Copy sw-description
 	if [ -f "${BOARD_DIR}/sw-description" ]; then
@@ -29,16 +38,16 @@ if [ -f "${BINARIES_DIR}/rootfs.ext2" ]; then
 	# sw-description must be first in the archive
 	cd "${SWU_TMP}"
 	
-	# Generate .swu file using cpio
-	# SWUpdate .swu files are CPIO archives in "newc" format
-	# sw-description must be the first file in the archive
-	# Use absolute paths for cpio to avoid path issues
-	cd "${SWU_TMP}"
-	
 	# Create file list ensuring sw-description is first
 	FILE_LIST=$(mktemp)
 	echo "./sw-description" > "${FILE_LIST}"
 	find . -type f ! -name "sw-description" -print | LC_ALL=C sort >> "${FILE_LIST}"
+	
+	# Update sw-description to reflect compressed filename if needed
+	if [ "${ROOTFS_COMPRESSED}" = "true" ]; then
+		sed -i 's/"filename": "rootfs\.ext2"/"filename": "rootfs.ext2.gz"/' "${SWU_TMP}/sw-description"
+		sed -i 's/"compressed": false/"compressed": true/' "${SWU_TMP}/sw-description"
+	fi
 	
 	# Create CPIO archive in newc format
 	cat "${FILE_LIST}" | cpio -o -H newc > "${BINARIES_DIR}/rptr8-rpi4.swu" 2>&1
