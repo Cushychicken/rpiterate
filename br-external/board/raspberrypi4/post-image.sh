@@ -26,13 +26,31 @@ if [ -f "${BINARIES_DIR}/rootfs.ext2" ]; then
 	fi
 	
 	# Generate .swu file using cpio (swupdate .swu files are CPIO archives)
+	# sw-description must be first in the archive
 	cd "${SWU_TMP}"
-	if find . -type f | cpio -o -H newc > "${BINARIES_DIR}/rptr8-rpi4.swu" 2>/dev/null; then
+	
+	# Generate .swu file using cpio
+	# SWUpdate .swu files are CPIO archives in "newc" format
+	# sw-description must be the first file in the archive
+	# Use absolute paths for cpio to avoid path issues
+	cd "${SWU_TMP}"
+	
+	# Create file list ensuring sw-description is first
+	FILE_LIST=$(mktemp)
+	echo "./sw-description" > "${FILE_LIST}"
+	find . -type f ! -name "sw-description" -print | LC_ALL=C sort >> "${FILE_LIST}"
+	
+	# Create CPIO archive in newc format
+	cat "${FILE_LIST}" | cpio -o -H newc > "${BINARIES_DIR}/rptr8-rpi4.swu" 2>&1
+	CPIO_EXIT=$?
+	rm -f "${FILE_LIST}"
+	
+	# Verify the archive was created successfully
+	if [ ${CPIO_EXIT} -eq 0 ] && [ -f "${BINARIES_DIR}/rptr8-rpi4.swu" ] && [ -s "${BINARIES_DIR}/rptr8-rpi4.swu" ]; then
 		echo "SWU file generated: ${BINARIES_DIR}/rptr8-rpi4.swu"
 	else
-		# Fallback without -H newc
-		find . -type f | cpio -o > "${BINARIES_DIR}/rptr8-rpi4.swu"
-		echo "SWU file generated: ${BINARIES_DIR}/rptr8-rpi4.swu"
+		echo "Error: Failed to generate SWU file (exit code: ${CPIO_EXIT})"
+		exit 1
 	fi
 else
 	echo "Warning: rootfs.ext2 not found, skipping SWU generation"
